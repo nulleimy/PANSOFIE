@@ -13,7 +13,8 @@
     "check:pilot": "node scripts/check-pilot-kit.mjs",
     "check:partners": "node scripts/check-partner-kit.mjs",
     "check:deploy": "node scripts/check-deployment-readiness.mjs",
-    "check": "npm run check:domain && npm run check:access && npm run check:flow && npm run check:pilot && npm run check:partners && npm run check:deploy && vite build"
+    "check:db-security": "node scripts/check-db-security-hardening.mjs",
+    "check": "npm run check:domain && npm run check:access && npm run check:flow && npm run check:pilot && npm run check:partners && npm run check:deploy && npm run check:db-security && vite build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
