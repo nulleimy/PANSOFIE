@@ -7,6 +7,8 @@ const files = {
   hardening: read("supabase/migrations/20260818210500_partner_challenge_execute_hardening_r4.sql"),
   partnerProjection: read("supabase/migrations/20260818211000_partner_workspace_projection_r4.sql"),
   adminDetail: read("supabase/migrations/20260818211500_admin_partner_challenge_detail_r4.sql"),
+  cohortFix: read("supabase/migrations/20260818212000_pilot_cohort_create_ambiguity_fix_r4.sql"),
+  proof: read("supabase/verification/staging_partner_challenge_r4_runtime_proof_v4.sql"),
   service: read("src/lib/pansofiePartnerFlow.js"),
   partner: read("src/pages/PartnerHub.jsx"),
   school: read("src/pages/SchoolChallengeInbox.jsx"),
@@ -37,13 +39,24 @@ const required = [
   [files.migration, "PASS | NEEDS_WORK | BLOCKED | NOT_APPLICABLE".split(" | ")[0]],
   [files.migration, "slug = 'circular-challenge'"],
   [files.migration, "Mission version changed; managed assignment must be recreated"],
-  [files.migration, "school_mission_assignment".replace("school_mission_assignment", "pansofie_assign_pilot_team_mission")],
+  [files.migration, "pansofie_assign_pilot_team_mission"],
   [files.migration, "enable row level security"],
   [files.migration, "revoke all on table public.partner_challenges from anon, authenticated"],
   [files.hardening, "from public, anon, authenticated"],
   [files.hardening, "grant execute on function public.pansofie_list_my_partner_challenges() to authenticated"],
   [files.partnerProjection, "pansofie_list_my_partner_organizations"],
   [files.adminDetail, "pansofie_admin_get_partner_challenge"],
+  [files.cohortFix, "new_cohort_id"],
+  [files.proof, "STAGING-ONLY VERIFICATION"],
+  [files.proof, "partner unexpectedly screened its own Challenge"],
+  [files.proof, "screening evidence was mutable"],
+  [files.proof, "learner-private key leaked to Partner projection"],
+  [files.proof, "Mission-version drift did not block acceptance"],
+  [files.proof, "expected exactly one learner run"],
+  [files.proof, "acceptance created premature learner evidence/reflection/Experience"],
+  [files.proof, "delete from public.processing_basis_events"],
+  [files.proof, "delete from public.processing_basis_records"],
+  [files.proof, "Zero-residue assertions"],
   [files.service, "supabase.rpc"],
   [files.service, "QUALITY_DIMENSIONS"],
   [files.partner, "CO JE TEĎ NA MNĚ?"],
@@ -62,6 +75,12 @@ const required = [
 ];
 
 const missing = required.filter(([content, token]) => !content.includes(token)).map(([, token]) => token);
+
+const cleanupEventPos = files.proof.indexOf("delete from public.processing_basis_events");
+const cleanupRecordPos = files.proof.indexOf("delete from public.processing_basis_records");
+if (cleanupEventPos < 0 || cleanupRecordPos < 0 || cleanupEventPos > cleanupRecordPos) {
+  missing.push("processing_basis_events cleanup must precede processing_basis_records cleanup");
+}
 
 const forbidden = [
   [files.service, '.from("partner_'],
