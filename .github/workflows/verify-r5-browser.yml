@@ -44,23 +44,6 @@ jobs:
           npm install --no-save @playwright/test@1.55.0
           npx playwright install chromium
 
-      - name: Refine verification-only selectors
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p = Path('tests/e2e/partner-review-r5-browser.spec.mjs')
-          s = p.read_text()
-          replacements = {
-            'await expect(page.getByText(user.email)).toHaveCount(0);': 'await expect(page.locator(\'section[aria-label="Partner Review R5"]\').getByText(user.email)).toHaveCount(0);',
-            'await page.getByLabel(/^Komu/).fill("Místní provoz");': 'await page.getByLabel(/^Komu\\? \\*/).fill("Místní provoz");',
-          }
-          for old, new in replacements.items():
-              if old not in s:
-                  raise SystemExit(f'verification selector anchor not found: {old}')
-              s = s.replace(old, new, 1)
-          p.write_text(s)
-          PY
-
       - name: Start exact R5 source locally
         run: |
           npm run dev -- --host 127.0.0.1 > /tmp/pansofie-r5-vite.log 2>&1 &
