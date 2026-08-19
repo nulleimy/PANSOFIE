@@ -38,7 +38,7 @@ for (const [path, heading] of ROUTES) {
   });
 }
 
-test("professional homepage exposes one dominant Experience entry and truthful Family state", async ({ page }) => {
+test("professional homepage exposes one dominant Experience entry and truthful readiness state", async ({ page }) => {
   const errors = runtimeErrors(page);
   await page.goto(BASE_URL, { waitUntil: "networkidle" });
 
@@ -46,9 +46,11 @@ test("professional homepage exposes one dominant Experience entry and truthful F
   const primary = page.getByRole("link", { name: /Vyzkoušet Pansofii za 60 sekund/ }).first();
   await expect(primary).toBeVisible();
   await expect(primary).toHaveAttribute("href", "/zapojit-se?mode=simulator");
-  await expect(page.getByRole("link", { name: /Prozkoumat první pilot/ })).toBeVisible();
-  await expect(page.getByText("Bounded runtime na stagingu")).toBeVisible();
-  await expect(page.getByText(/Family workspace je implementovaný pro purpose-specific pilotní přístup/)).toBeVisible();
+  await expect(page.getByRole("link", { name: /Jak Pansofie funguje/i }).first()).toHaveAttribute("href", "/jak-funguje");
+  await expect(page.getByText("Připraveno pro pilotní zapojení")).toBeVisible();
+  await expect(page.getByText(/Rodina může bezpečně přidat kontext a podnět/)).toBeVisible();
+  await expect(page.getByText(/Bounded runtime na stagingu/i)).toHaveCount(0);
+  await expect(page.getByText(/STAGING VERIFIED/i)).toHaveCount(0);
   expect(errors, `runtime errors on homepage:\n${errors.join("\n")}`).toEqual([]);
 });
 
@@ -69,7 +71,7 @@ test("PANSOFIEDIT offers all six role-adaptive entry points", async ({ page }) =
   await expect(page.getByLabel("Živý náhled vznikající Experience")).toBeVisible();
 });
 
-test("school journey composes live, reaches scroll story and remains fail-closed", async ({ page }) => {
+test("school journey composes live and ends with a truthful role-aware next step", async ({ page }) => {
   const errors = runtimeErrors(page);
   await page.goto(`${BASE_URL}/zapojit-se?role=school`, { waitUntil: "networkidle" });
 
@@ -99,8 +101,11 @@ test("school journey composes live, reaches scroll story and remains fail-closed
   await expect(page.getByRole("button", { name: /Přejít na krok 10: DALŠÍ KROK/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Experience je střed/ })).toBeVisible();
 
-  await page.getByRole("button", { name: /Připravit lokální shrnutí/ }).click();
-  await expect(page.getByRole("status")).toContainText("nic neodesílá ani neukládá na server");
+  const next = page.getByRole("link", { name: /Prozkoumat školní pilot/i });
+  await expect(next).toBeVisible();
+  await expect(next).toHaveAttribute("href", "/pilot");
+  await expect(page.locator("form")).toHaveCount(0);
+  await expect(page.getByText(/Tato ukázka nic neodesílá ani neukládá na server/i)).toBeVisible();
   expect(errors, `runtime errors:\n${errors.join("\n")}`).toEqual([]);
 });
 
