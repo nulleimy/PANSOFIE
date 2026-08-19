@@ -1,24 +1,18 @@
 name: PR Public UI Visual Proof
 
 on:
-  pull_request:
-    paths:
-      - ".github/workflows/pr-public-ui-visual-proof.yml"
-      - "tests/e2e/public-ui-visual-reference.spec.mjs"
-      - "src/pages/Home.jsx"
-      - "src/components/pansofie/PublicNav.jsx"
-      - "src/components/pansofie/PublicFooter.jsx"
-      - "src/components/pansofie/Method.jsx"
-      - "src/components/pansofie/ExperienceFlow.jsx"
-      - "src/components/pansofie/Programs.jsx"
-      - "src/components/pansofie/MissionMap.jsx"
-      - "src/components/pansofie/Ecosystem.jsx"
+  workflow_dispatch:
+    inputs:
+      preview_url:
+        description: "Exact Vercel preview/share URL to verify"
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: pansofie-pr-public-ui-visual-proof-${{ github.event.pull_request.number }}
+  group: pansofie-public-ui-visual-proof
   cancel-in-progress: true
 
 jobs:
@@ -26,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      PANSOFIE_PR_PREVIEW_URL: https://pansofie-staging-git-feat-public-ui-experie-532d54-voodoo-caser.vercel.app
+      PANSOFIE_PR_PREVIEW_URL: ${{ inputs.preview_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -50,7 +44,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pansofie-pr48-public-ui-visual-proof
+          name: pansofie-public-ui-visual-proof
           path: test-results/
           if-no-files-found: warn
           retention-days: 14
