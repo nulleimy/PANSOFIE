@@ -66,7 +66,7 @@ export default function MissionMap() {
             />
             <div className="absolute inset-0 bg-background/10 pointer-events-none" aria-hidden="true" />
             <div className="absolute left-4 top-4 z-20 rounded-full border border-border bg-background/90 px-3 py-1.5 text-[10px] tracking-[0.12em] font-semibold text-muted-foreground backdrop-blur">
-              ILUSTRAČNÍ · NEJSOU TO POTVRZENÉ PILOTY
+              ILUSTRAČNÍ MAPA · NEJSOU TO POTVRZENÉ PILOTY
             </div>
 
             {shown.map((item) => {
@@ -117,7 +117,7 @@ export default function MissionMap() {
             <div className="mt-auto pt-6">
               <div className="flex items-center gap-2 text-primary"><Sparkles className="w-4 h-4" /><span className="text-xs tracking-[0.15em] uppercase font-semibold">Vlastní nápad</span></div>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Nemusíš čekat na přidělenou misi. Vyber inspiraci, uprav ji podle sebe nebo začni vlastním nápadem.</p>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Vlastní nápad je návrh a nevytváří automaticky Mission Run ani neobchází bezpečnostní nebo souhlasové hranice.</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Nevytváří automaticky Mission Run ani neobchází bezpečnostní nebo souhlasové hranice.</p>
               <Link to="/zapojit-se?mode=simulator" className="mt-4 action-primary w-full justify-center rounded-full">+ Vymyslet vlastní misi <ArrowRight className="w-4 h-4" /></Link>
             </div>
           </aside>
