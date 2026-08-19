@@ -6,57 +6,69 @@ const GROUPS = [
   {
     title: "Pansofie",
     links: [
-      ["/jak-funguje", "Jak to funguje"],
-      ["/pilot", "Pilot školy"],
-      ["/partneri", "Pro partnery"],
-      ["/zapojit-se", "Zapojit se"],
+      ["/#jak-funguje", "Jak to funguje", "anchor"],
+      ["/#experience", "Experience", "anchor"],
+      ["/#mise", "Mission Map", "anchor"],
+      ["/#ekosystem", "Ekosystém", "anchor"],
+    ],
+  },
+  {
+    title: "Programy",
+    links: [
+      ["/program/school", "School", "route"],
+      ["/program/family", "Family", "route"],
+      ["/program/community", "Community", "route"],
+      ["/program/youth", "Youth", "route"],
     ],
   },
   {
     title: "Důvěra",
     links: [
-      ["/bezpecnost", "Bezpečnost dětí"],
-      ["/soukromi", "Soukromí"],
-      ["/podminky", "Podmínky"],
-    ],
-  },
-  {
-    title: "O projektu",
-    links: [
-      ["/o-projektu", "O Pansofii"],
-      ["/kontakt", "Kontakt"],
-      ["/login", "Přihlášení"],
+      ["/bezpecnost", "Bezpečnost dětí", "route"],
+      ["/soukromi", "Soukromí", "route"],
+      ["/podminky", "Podmínky", "route"],
+      ["/o-projektu", "O projektu", "route"],
+      ["/kontakt", "Kontakt", "route"],
     ],
   },
 ];
 
+function FooterLink({ to, label, type }) {
+  const cls = "text-sm text-muted-foreground hover:text-foreground transition-colors";
+  if (type === "anchor") return <a href={to} className={cls}>{label}</a>;
+  return <Link to={to} className={cls}>{label}</Link>;
+}
+
 export default function PublicFooter() {
   return (
-    <footer className="border-t border-border/60 bg-card/35">
-      <div className="container-px max-w-7xl mx-auto py-12 sm:py-14">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.25fr_1fr_1fr_1fr] gap-9 lg:gap-12">
-          <div className="max-w-sm">
-            <Link to="/" className="inline-flex items-center gap-2 font-heading font-bold text-lg">
-              <span className="h-9 w-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center"><Leaf size={18} /></span>
-              Pansofie
+    <footer className="border-t border-border bg-secondary/40">
+      <div className="container-px max-w-7xl mx-auto py-16">
+        <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
+          <div>
+            <Link to="/" className="inline-flex items-center gap-2.5">
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-primary text-primary-foreground"><Leaf className="w-4 h-4" strokeWidth={2} /></span>
+              <span className="flex flex-col leading-none">
+                <span className="font-display text-lg font-semibold tracking-tight">Pansofie</span>
+                <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground font-semibold mt-1">Skutečné zkušenosti</span>
+              </span>
             </Link>
-            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">Poznej sebe. Tvoř s druhými. Zlepšuj svět.</p>
-            <p className="mt-3 text-xs text-muted-foreground leading-relaxed">Pansofie je ve fázi přípravy prvního reálného školního pilotu. Veřejně oddělujeme to, co je už technicky ověřené, od toho, co musí teprve potvrdit field pilot.</p>
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">Experience-first ekosystém. Poznej sebe. Tvoř s druhými. Zlepšuj svět.</p>
+            <p className="mt-4 max-w-sm text-xs leading-relaxed text-muted-foreground">Současná veřejná verze je pre-field-pilot. Technicky funkční části oddělujeme od toho, co musí teprve potvrdit reálný pilot.</p>
           </div>
 
           {GROUPS.map((group) => (
             <div key={group.title}>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{group.title}</p>
-              <div className="mt-4 flex flex-col gap-2.5">
-                {group.links.map(([to, label]) => <Link key={to} to={to} className="text-sm hover:text-primary transition-colors">{label}</Link>)}
-              </div>
+              <p className="text-xs tracking-[0.18em] uppercase text-foreground font-semibold">{group.title}</p>
+              <ul className="mt-4 space-y-2.5">
+                {group.links.map(([to, label, type]) => <li key={`${group.title}-${label}`}><FooterLink to={to} label={label} type={type} /></li>)}
+              </ul>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border/60 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-xs text-muted-foreground">
-          <p>Současná veřejná verze je pre-field-pilot. Nejde o tvrzení prokázaného pedagogického nebo dlouhodobého dopadu.</p>
-          <p>© 2026 Pansofie</p>
+        <div className="mt-14 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Pansofie. Pre-field-pilot fáze.</p>
+          <p className="text-xs text-muted-foreground">Výsledek není známka člověka. Je to doložená zkušenost.</p>
         </div>
       </div>
     </footer>
