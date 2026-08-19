@@ -17,6 +17,7 @@
     "check:pilot-visible": "node scripts/check-pilot-visible.mjs",
     "check:public-product": "node scripts/check-public-product-v3.mjs",
     "check:public-completion": "node scripts/check-public-web-completion-r1.mjs",
+    "check:public-ui-experience": "node scripts/check-public-ui-experience-r1.mjs",
     "check:pansofiedit": "node scripts/check-pansofiedit-r1.mjs",
     "check:pansofiedit-r2": "node scripts/check-pansofiedit-r2.mjs",
     "check:field-pilot-ops": "node scripts/check-field-pilot-operationalization-r1.mjs",
@@ -25,7 +26,7 @@
     "check:professional-polish": "node scripts/check-pansofiedit-professional-polish-r1.mjs",
     "check:partner-challenge-r4": "node scripts/check-partner-challenge-quality-gate-r4.mjs",
     "check:partner-review-r5": "node scripts/check-partner-review-adoption-outcome-r5.mjs",
-    "check": "npm run check:domain && npm run check:access && npm run check:flow && npm run check:pilot && npm run check:partners && npm run check:deploy && npm run check:db-security && npm run check:pilot-visible && npm run check:public-product && npm run check:public-completion && npm run check:pansofiedit && npm run check:pansofiedit-r2 && npm run check:field-pilot-ops && npm run check:field-pilot-readiness && npm run check:field-pilot-family && npm run check:professional-polish && npm run check:partner-challenge-r4 && npm run check:partner-review-r5 && vite build"
+    "check": "npm run check:domain && npm run check:access && npm run check:flow && npm run check:pilot && npm run check:partners && npm run check:deploy && npm run check:db-security && npm run check:pilot-visible && npm run check:public-product && npm run check:public-completion && npm run check:public-ui-experience && npm run check:pansofiedit && npm run check:pansofiedit-r2 && npm run check:field-pilot-ops && npm run check:field-pilot-readiness && npm run check:field-pilot-family && npm run check:professional-polish && npm run check:partner-challenge-r4 && npm run check:partner-review-r5 && vite build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
