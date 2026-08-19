@@ -33,8 +33,8 @@ jobs:
 
       - name: Verify exact inherited R5 runtime
         run: |
-          git merge-base --is-ancestor d3a7e0657b0d1a9916a71bc34adcff68e2225b2f HEAD
-          test "$(git diff --name-only d3a7e0657b0d1a9916a71bc34adcff68e2225b2f...HEAD | grep -v '^tests/e2e/partner-review-r5-browser.spec.mjs$' | grep -v '^.github/workflows/verify-r5-browser.yml$' | wc -l | tr -d ' ')" = "0"
+          git merge-base --is-ancestor 32bf26bf695806f0088d57841d65cf9cb196de91 HEAD
+          test "$(git diff --name-only 32bf26bf695806f0088d57841d65cf9cb196de91...HEAD | grep -v '^tests/e2e/partner-review-r5-browser.spec.mjs$' | grep -v '^.github/workflows/verify-r5-browser.yml$' | wc -l | tr -d ' ')" = "0"
 
       - name: Install app dependencies
         run: npm install
