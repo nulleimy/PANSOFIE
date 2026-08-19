@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
+      # Verification-only trigger: post-R5 canonical staging proof.
       PANSOFIE_STAGING_URL: https://pansofie-staging.vercel.app
     steps:
       - uses: actions/checkout@v4
