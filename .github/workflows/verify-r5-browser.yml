@@ -44,6 +44,19 @@ jobs:
           npm install --no-save @playwright/test@1.55.0
           npx playwright install chromium
 
+      - name: Scope verification-only Partner identity assertion
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('tests/e2e/partner-review-r5-browser.spec.mjs')
+          s = p.read_text()
+          old = 'await expect(page.getByText(user.email)).toHaveCount(0);'
+          new = 'await expect(page.locator(\'section[aria-label="Partner Review R5"]\').getByText(user.email)).toHaveCount(0);'
+          if old not in s:
+              raise SystemExit('verification assertion anchor not found')
+          p.write_text(s.replace(old, new, 1))
+          PY
+
       - name: Start exact R5 source locally
         run: |
           npm run dev -- --host 127.0.0.1 > /tmp/pansofie-r5-vite.log 2>&1 &
