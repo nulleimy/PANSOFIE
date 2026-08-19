@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      PANSOFIE_PR_PREVIEW_URL: https://pansofie-staging-git-feat-public-ui-experie-532d54-voodoo-caser.vercel.app
+      PANSOFIE_PR_PREVIEW_URL: https://pansofie-staging-mcvmy6a5h-voodoo-caser.vercel.app/?_vercel_share=UMkC2n10DlDjv0LZz1Fr4bExdJ0trwoa
     steps:
       - uses: actions/checkout@v4
 
