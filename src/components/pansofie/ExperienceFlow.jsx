@@ -96,9 +96,9 @@ export default function ExperienceFlow() {
           </p>
         </div>
 
-        <div className="mt-14 grid lg:grid-cols-[280px_1fr] gap-8">
-          <div className="lg:sticky lg:top-28 lg:self-start">
-            <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0" aria-label="Kroky ukázkové Experience">
+        <div className="mt-14 grid min-w-0 lg:grid-cols-[280px_1fr] gap-8">
+          <div className="min-w-0 lg:sticky lg:top-28 lg:self-start">
+            <div className="flex w-full max-w-full lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0" aria-label="Kroky ukázkové Experience">
               {STEPS.map((item, index) => {
                 const StepIcon = item.icon;
                 const done = index < step || showPassport;
@@ -128,13 +128,13 @@ export default function ExperienceFlow() {
           </div>
 
           {!showPassport ? (
-            <div key={step} className="rounded-3xl border border-border bg-card p-7 sm:p-9" aria-live="polite">
+            <div key={step} className="min-w-0 rounded-3xl border border-border bg-card p-7 sm:p-9" aria-live="polite">
               <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground shrink-0">
                     <Icon className="w-5 h-5" strokeWidth={1.8} />
                   </span>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-semibold">Krok {current.n} ze 4</p>
                     <h3 className="font-display text-2xl font-semibold text-foreground">{current.title}</h3>
                   </div>
@@ -158,12 +158,12 @@ export default function ExperienceFlow() {
                 <p className="mt-2.5 text-sm leading-relaxed text-foreground/85">{current.output}</p>
               </div>
 
-              <div className="mt-5">
+              <div className="mt-5 min-w-0">
                 <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-semibold mb-3">Kdo je v hře</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex min-w-0 flex-wrap gap-2">
                   {current.roles.map(([role, value]) => (
-                    <span key={`${role}-${value}`} className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs">
-                      <span className="font-semibold text-primary">{role}</span><span className="text-muted-foreground">·</span><span className="text-foreground/75">{value}</span>
+                    <span key={`${role}-${value}`} className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs">
+                      <span className="font-semibold text-primary">{role}</span><span className="text-muted-foreground">·</span><span className="min-w-0 break-words text-foreground/75">{value}</span>
                     </span>
                   ))}
                 </div>
@@ -184,12 +184,12 @@ export default function ExperienceFlow() {
               </div>
             </div>
           ) : (
-            <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-card to-primary/5 p-7 sm:p-9" aria-live="polite">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground">
+            <div className="min-w-0 rounded-3xl border border-primary/30 bg-gradient-to-br from-card to-primary/5 p-7 sm:p-9" aria-live="polite">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground shrink-0">
                   <BookOpenCheck className="w-5 h-5" strokeWidth={1.8} />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <p className="text-[10px] tracking-[0.2em] uppercase text-primary font-semibold">Ukázka výsledku</p>
                   <h3 className="font-display text-2xl font-semibold text-foreground">Experience Passport</h3>
                 </div>
@@ -201,11 +201,11 @@ export default function ExperienceFlow() {
 
               <div className="mt-6 grid sm:grid-cols-2 gap-3">
                 {STEPS.map((item) => (
-                  <div key={item.n} className="flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
+                  <div key={item.n} className="flex min-w-0 items-start gap-3 rounded-2xl border border-border bg-card p-4">
                     <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                    <div>
+                    <div className="min-w-0">
                       <p className="text-sm font-semibold text-foreground">{item.n} · {item.title}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{item.output}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5 break-words">{item.output}</p>
                     </div>
                   </div>
                 ))}
