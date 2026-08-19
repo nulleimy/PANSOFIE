@@ -43,10 +43,10 @@ export default function Home() {
 
               <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <a href="#mise" className="action-primary w-full sm:w-auto px-7 py-3.5">Objevit nápady na mise <ArrowRight size={18} /></a>
-                <Link to="/zapojit-se?mode=simulator" className="action-secondary w-full sm:w-auto px-7 py-3.5">Vymyslet vlastní misi <ArrowRight size={17} /></Link>
+                <Link to="/zapojit-se?mode=simulator" className="action-secondary w-full sm:w-auto px-7 py-3.5">Vyzkoušet Pansofii za 60 sekund <ArrowRight size={17} /></Link>
               </div>
 
-              <p className="mt-4 text-xs sm:text-sm text-muted-foreground">Interaktivní ukázky na veřejném webu samy nevytvářejí Mission Run, ověření ani dopad.</p>
+              <p className="mt-4 text-xs sm:text-sm text-muted-foreground">Interaktivní ukázka nic neposílá na server a sama nevytváří Mission Run, ověření ani dopad.</p>
 
               <div className="mt-6 flex flex-col sm:flex-row sm:flex-wrap gap-x-5 gap-y-2.5">
                 {HERO_TRUST.map((item) => (
