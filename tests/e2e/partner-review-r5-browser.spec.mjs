@@ -21,6 +21,12 @@ const IDs = {
   decision: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
 };
 
+const LEARNER_SENTINELS = [
+  "learner-r5@example.invalid",
+  "RAW_LEARNER_PRIVATE_REFLECTION_SENTINEL",
+  "RAW_LEARNER_EVIDENCE_SENTINEL",
+];
+
 const assignmentRow = {
   assignment_id: IDs.assignment,
   challenge_id: IDs.challenge,
@@ -66,7 +72,6 @@ async function installMockSession(page, mode) {
   await page.addInitScript(({ session }) => {
     localStorage.setItem("sb-placeholder-auth-token", JSON.stringify(session));
   }, { session });
-  return user;
 }
 
 async function installSupabaseMocks(page, mode) {
@@ -132,7 +137,6 @@ async function installSupabaseMocks(page, mode) {
     if (rpc === "pansofie_list_school_challenge_outcomes") return json(schoolSubmitted ? [deliverableRow()] : []);
     if (rpc === "pansofie_school_submit_challenge_deliverable") { schoolSubmitted = true; return json(IDs.deliverable); }
 
-    // Unrelated member-layout/supporting reads stay empty and bounded.
     if (p.startsWith("/rest/v1/")) return json([]);
     return json({});
   });
@@ -142,6 +146,12 @@ async function installSupabaseMocks(page, mode) {
     isOutcomeRecorded: () => outcomeRecorded,
     isSchoolSubmitted: () => schoolSubmitted,
   };
+}
+
+async function assertNoLearnerPrivateLeak(page) {
+  for (const sentinel of LEARNER_SENTINELS) {
+    await expect(page.getByText(sentinel, { exact: false })).toHaveCount(0);
+  }
 }
 
 async function assertViewport(page, name, label) {
@@ -157,14 +167,14 @@ for (const viewport of [
   test(`R5 Partner Review ${viewport.label}`, async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height } });
     const page = await context.newPage();
-    const user = await installMockSession(page, "partner");
+    await installMockSession(page, "partner");
     const state = await installSupabaseMocks(page, "partner");
     const errors = [];
     page.on("pageerror", e => errors.push(e.message));
     await page.goto(`${BASE_URL}/partner-workspace`, { waitUntil: "networkidle" });
     await expect(page.getByRole("heading", { name: /Review výstupu\. Ne hodnocení člověka/i })).toBeVisible();
     await expect(page.getByText("OUTPUT READY").first()).toBeVisible();
-    await expect(page.getByText(user.email)).toHaveCount(0);
+    await assertNoLearnerPrivateLeak(page);
     await page.getByRole("button", { name: "ANO" }).click();
     await page.getByLabel(/Co je užitečné/).fill("Výstup je použitelný pro pilotní ověření.");
     await page.getByLabel(/Co by bylo potřeba změnit/).fill("Doplnit vlastníka a termín.");
@@ -172,6 +182,7 @@ for (const viewport of [
     await page.getByRole("button", { name: /Uložit review a rozhodnutí/ }).click();
     await expect.poll(() => state.isReviewed()).toBe(true);
     await expect(page.getByText(/Rozhodnutí:\s*PILOT/i)).toBeVisible();
+    await assertNoLearnerPrivateLeak(page);
     await page.getByLabel(/Co se změnilo/).fill("Pilot změnil jeden materiálový proces.");
     await page.getByLabel(/^Komu/).fill("Místní provoz");
     await page.getByLabel(/Kdy pozorováno/).fill("2026-08-19");
@@ -179,6 +190,7 @@ for (const viewport of [
     await page.getByRole("button", { name: /Zaznamenat bounded outcome/ }).click();
     await expect.poll(() => state.isOutcomeRecorded()).toBe(true);
     await expect(page.getByText(/REPORTED · UNVERIFIED/).first()).toBeVisible();
+    await assertNoLearnerPrivateLeak(page);
     await assertViewport(page, "partner-review-r5", viewport.label);
     expect(errors).toEqual([]);
     await context.close();
