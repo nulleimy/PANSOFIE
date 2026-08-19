@@ -119,7 +119,7 @@ export default function Ecosystem() {
 
   return (
     <section id="ekosystem" className="py-24 lg:py-32 bg-secondary/40 border-y border-border/60 scroll-mt-24">
-      <div className="container-px max-w-7xl mx-auto">
+      <div className="container-px max-w-7xl mx-auto min-w-0">
         <div className="max-w-2xl">
           <p className="eyebrow">Pansofie ekosystém</p>
           <h2 className="mt-4 font-display text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-balance">
@@ -172,44 +172,44 @@ export default function Ecosystem() {
           </div>
         </div>
 
-        <div className="md:hidden mt-10 flex flex-wrap gap-2.5">
+        <div className="md:hidden mt-10 flex min-w-0 flex-wrap gap-2.5">
           {ROLES.map((item) => {
             const Icon = item.icon;
             const isActive = item.id === active;
             return (
-              <button key={item.id} type="button" onClick={() => setActive(item.id)} aria-pressed={isActive} className={`inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${isActive ? "bg-primary text-primary-foreground" : "bg-card border border-border text-foreground/70"}`}>
-                <Icon className="w-4 h-4" strokeWidth={1.8} /> {item.label}
+              <button key={item.id} type="button" onClick={() => setActive(item.id)} aria-pressed={isActive} className={`inline-flex max-w-full items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors ${isActive ? "bg-primary text-primary-foreground" : "bg-card border border-border text-foreground/70"}`}>
+                <Icon className="w-4 h-4 shrink-0" strokeWidth={1.8} /> <span className="min-w-0 break-words">{item.label}</span>
               </button>
             );
           })}
         </div>
 
-        <div key={role.id} className="mt-12 grid lg:grid-cols-3 gap-5" aria-live="polite">
-          <div className="rounded-2xl bg-card border border-border p-8">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground"><RoleIcon className="w-5 h-5" strokeWidth={1.8} /></span>
-              <div>
-                <h3 className="font-display text-xl font-semibold text-foreground">{role.name}</h3>
-                <p className="text-xs text-primary font-semibold mt-0.5">{role.status}</p>
+        <div key={role.id} className="mt-12 grid min-w-0 lg:grid-cols-3 gap-5" aria-live="polite">
+          <div className="min-w-0 rounded-2xl bg-card border border-border p-8">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground shrink-0"><RoleIcon className="w-5 h-5" strokeWidth={1.8} /></span>
+              <div className="min-w-0">
+                <h3 className="font-display text-xl font-semibold text-foreground break-words">{role.name}</h3>
+                <p className="text-xs text-primary font-semibold mt-0.5 break-words">{role.status}</p>
               </div>
             </div>
             <p className="mt-6 text-sm text-muted-foreground leading-relaxed">Experience je centrum — role se kolem ní organizují podle konkrétní potřeby, oprávnění a bezpečných hranic.</p>
           </div>
 
-          <div className="lg:col-span-2 grid sm:grid-cols-3 gap-5">
-            <div className="rounded-2xl bg-card border border-border p-6"><p className="text-[10px] tracking-[0.2em] uppercase text-primary font-semibold">Může získat</p><p className="mt-3 text-sm leading-relaxed text-foreground/85">{role.receives}</p></div>
-            <div className="rounded-2xl bg-card border border-border p-6"><p className="text-[10px] tracking-[0.2em] uppercase text-primary font-semibold">Přináší</p><p className="mt-3 text-sm leading-relaxed text-foreground/85">{role.contributes}</p></div>
-            <div className="rounded-2xl bg-primary text-primary-foreground p-6"><p className="text-[10px] tracking-[0.2em] uppercase text-primary-foreground/70 font-semibold">Bezpečná hranice</p><p className="mt-3 text-sm leading-relaxed">{role.boundary}</p></div>
+          <div className="min-w-0 lg:col-span-2 grid sm:grid-cols-3 gap-5">
+            <div className="min-w-0 rounded-2xl bg-card border border-border p-6"><p className="text-[10px] tracking-[0.2em] uppercase text-primary font-semibold">Může získat</p><p className="mt-3 text-sm leading-relaxed text-foreground/85 break-words">{role.receives}</p></div>
+            <div className="min-w-0 rounded-2xl bg-card border border-border p-6"><p className="text-[10px] tracking-[0.2em] uppercase text-primary font-semibold">Přináší</p><p className="mt-3 text-sm leading-relaxed text-foreground/85 break-words">{role.contributes}</p></div>
+            <div className="min-w-0 rounded-2xl bg-primary text-primary-foreground p-6"><p className="text-[10px] tracking-[0.2em] uppercase text-primary-foreground/70 font-semibold">Bezpečná hranice</p><p className="mt-3 text-sm leading-relaxed break-words">{role.boundary}</p></div>
           </div>
 
-          <div className="lg:col-span-3 rounded-2xl border border-border bg-card/70 p-6">
-            <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-semibold flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary" />Co může proudit z {role.flowFrom}</p>
-            <div className="mt-4 flex flex-wrap gap-2.5">
+          <div className="min-w-0 lg:col-span-3 rounded-2xl border border-border bg-card/70 p-6">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground font-semibold flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Co může proudit z {role.flowFrom}</p>
+            <div className="mt-4 flex min-w-0 flex-wrap gap-2.5">
               {role.flows.map((flow) => {
                 const target = ROLES.find((item) => item.id === flow.to);
                 return (
-                  <span key={`${role.id}-${flow.to}`} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm text-foreground">
-                    <span className="font-semibold text-primary">{role.label}</span><ArrowRight className="w-3.5 h-3.5 text-primary" /><span className="text-muted-foreground">{flow.label}</span><ArrowRight className="w-3.5 h-3.5 text-muted-foreground/50" /><span className="font-semibold">{target?.label}</span>
+                  <span key={`${role.id}-${flow.to}`} className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-2xl sm:rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm text-foreground">
+                    <span className="font-semibold text-primary">{role.label}</span><ArrowRight className="w-3.5 h-3.5 shrink-0 text-primary" /><span className="min-w-0 break-words text-muted-foreground">{flow.label}</span><ArrowRight className="w-3.5 h-3.5 shrink-0 text-muted-foreground/50" /><span className="font-semibold">{target?.label}</span>
                   </span>
                 );
               })}
