@@ -1,0 +1,56 @@
+name: PR Public UI Visual Proof
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/pr-public-ui-visual-proof.yml"
+      - "tests/e2e/public-ui-visual-reference.spec.mjs"
+      - "src/pages/Home.jsx"
+      - "src/components/pansofie/PublicNav.jsx"
+      - "src/components/pansofie/PublicFooter.jsx"
+      - "src/components/pansofie/Method.jsx"
+      - "src/components/pansofie/ExperienceFlow.jsx"
+      - "src/components/pansofie/Programs.jsx"
+      - "src/components/pansofie/MissionMap.jsx"
+      - "src/components/pansofie/Ecosystem.jsx"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pansofie-pr-public-ui-visual-proof-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  chromium-visual-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PANSOFIE_PR_PREVIEW_URL: https://pansofie-staging-git-feat-public-ui-experie-532d54-voodoo-caser.vercel.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install app dependencies
+        run: npm install
+
+      - name: Install Playwright test runner
+        run: npm install --no-save @playwright/test@1.55.0
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture desktop and mobile visual proof
+        run: npx playwright test tests/e2e/public-ui-visual-reference.spec.mjs --reporter=line --workers=1
+
+      - name: Upload visual proof screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pansofie-pr48-public-ui-visual-proof
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 14
