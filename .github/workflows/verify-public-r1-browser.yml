@@ -24,6 +24,8 @@ jobs:
       PANSOFIE_LOCAL_URL: http://127.0.0.1:5173
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
