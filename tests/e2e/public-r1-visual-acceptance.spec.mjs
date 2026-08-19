@@ -1,6 +1,11 @@
+import fs from "node:fs";
+import path from "node:path";
 import { test, expect } from "@playwright/test";
 
 const BASE_URL = process.env.PANSOFIE_LOCAL_URL || "http://127.0.0.1:5173";
+const EVIDENCE_DIR = path.resolve("browser-evidence");
+fs.mkdirSync(EVIDENCE_DIR, { recursive: true });
+
 const ROUTES = [
   ["home", "/"],
   ["jak-funguje", "/jak-funguje"],
@@ -21,16 +26,16 @@ function captureRuntimeErrors(page) {
   return errors;
 }
 
-for (const [name, path] of ROUTES) {
+for (const [name, route] of ROUTES) {
   for (const viewport of [
     { label: "desktop", width: 1440, height: 1100, isMobile: false },
     { label: "mobile", width: 390, height: 844, isMobile: true },
   ]) {
-    test(`${name} ${viewport.label} visual acceptance`, async ({ browser }, testInfo) => {
+    test(`${name} ${viewport.label} visual acceptance`, async ({ browser }) => {
       const context = await browser.newContext({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.isMobile });
       const page = await context.newPage();
       const errors = captureRuntimeErrors(page);
-      const response = await page.goto(`${BASE_URL}${path}`, { waitUntil: "networkidle" });
+      const response = await page.goto(`${BASE_URL}${route}`, { waitUntil: "networkidle" });
       expect(response).not.toBeNull();
       expect(response.status()).toBeLessThan(400);
 
@@ -40,7 +45,7 @@ for (const [name, path] of ROUTES) {
       }));
       expect(dimensions.scrollWidth, `${name} ${viewport.label} horizontal overflow`).toBeLessThanOrEqual(dimensions.innerWidth + 1);
 
-      await page.screenshot({ path: testInfo.outputPath(`${name}-${viewport.label}.png`), fullPage: true });
+      await page.screenshot({ path: path.join(EVIDENCE_DIR, `${name}-${viewport.label}.png`), fullPage: true });
       expect(errors, `${name} ${viewport.label} runtime errors:\n${errors.join("\n")}`).toEqual([]);
       await context.close();
     });
@@ -74,7 +79,7 @@ test("PANSOFIEDIT reaches a truthful role-aware next step without fake submit", 
 
   await expect(page.getByText(/Právě jste prošli principem Pansofie/)).toBeVisible();
   await expect(page.getByRole("link", { name: /Prozkoumat školní pilot/i })).toHaveAttribute("href", "/pilot");
-  await expect(page.locator('form')).toHaveCount(0);
+  await expect(page.locator("form")).toHaveCount(0);
   await expect(page.getByText(/nic neposílá na server|nic neodesílá ani neukládá na server/i).first()).toBeVisible();
   expect(errors, `PANSOFIEDIT runtime errors:\n${errors.join("\n")}`).toEqual([]);
 });
