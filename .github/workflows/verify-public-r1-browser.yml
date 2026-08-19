@@ -1,0 +1,77 @@
+name: Verify Public R1 Browser
+
+on:
+  push:
+    branches:
+      - verify/public-web-visual-polish-r1-browser
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-public-r1-browser-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual-acceptance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PANSOFIE_LOCAL_URL: http://127.0.0.1:5173
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify inherited R1 runtime head
+        run: |
+          echo "VERIFY_BRANCH_HEAD=$(git rev-parse HEAD)"
+          echo "R1_RUNTIME_PARENT=$(git rev-parse HEAD~2)"
+          test "$(git rev-parse HEAD~2)" = "b78228d04047f438a6190b2318cc9e227d96b60a"
+
+      - name: Install app dependencies
+        run: npm install
+
+      - name: Run repository checks and production build
+        run: npm run check
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Start local Vite server
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/pansofie-r1-vite.log 2>&1 &
+          echo $! > /tmp/pansofie-r1-vite.pid
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5173/ >/dev/null; then
+              echo "LOCAL_VITE=READY"
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/pansofie-r1-vite.log
+          exit 1
+
+      - name: Run R1 desktop/mobile browser acceptance
+        run: npx playwright test tests/e2e/public-r1-visual-acceptance.spec.mjs --reporter=line
+
+      - name: Upload R1 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pansofie-public-r1-browser-evidence
+          path: |
+            test-results/
+            /tmp/pansofie-r1-vite.log
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Stop local Vite server
+        if: always()
+        run: |
+          if [ -f /tmp/pansofie-r1-vite.pid ]; then kill "$(cat /tmp/pansofie-r1-vite.pid)" || true; fi
