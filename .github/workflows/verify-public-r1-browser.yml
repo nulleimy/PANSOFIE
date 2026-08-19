@@ -71,6 +71,7 @@ jobs:
         with:
           name: pansofie-public-r1-browser-evidence
           path: |
+            browser-evidence/
             test-results/
             /tmp/pansofie-r1-vite.log
           if-no-files-found: warn
