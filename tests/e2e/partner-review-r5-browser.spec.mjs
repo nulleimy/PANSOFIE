@@ -184,7 +184,7 @@ for (const viewport of [
     await expect(page.getByText(/Rozhodnutí:\s*PILOT/i)).toBeVisible();
     await assertNoLearnerPrivateLeak(page);
     await page.getByLabel(/Co se změnilo/).fill("Pilot změnil jeden materiálový proces.");
-    await page.getByLabel(/^Komu/).fill("Místní provoz");
+    await page.getByRole("textbox", { name: "Komu? *", exact: true }).fill("Místní provoz");
     await page.getByLabel(/Kdy pozorováno/).fill("2026-08-19");
     await page.getByLabel(/^Zdroj/).fill("Interní pilotní záznam");
     await page.getByRole("button", { name: /Zaznamenat bounded outcome/ }).click();
