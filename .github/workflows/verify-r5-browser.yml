@@ -1,0 +1,79 @@
+name: Verify R5 Browser
+
+on:
+  push:
+    branches:
+      - verify/partner-review-adoption-outcome-r5-browser
+  pull_request:
+    branches:
+      - feat/partner-review-adoption-outcome-r5
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-r5-browser-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  r5-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      PANSOFIE_LOCAL_URL: http://127.0.0.1:5173
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify exact inherited R5 runtime
+        run: |
+          git merge-base --is-ancestor d3a7e0657b0d1a9916a71bc34adcff68e2225b2f HEAD
+          test "$(git diff --name-only d3a7e0657b0d1a9916a71bc34adcff68e2225b2f...HEAD | grep -v '^tests/e2e/partner-review-r5-browser.spec.mjs$' | grep -v '^.github/workflows/verify-r5-browser.yml$' | wc -l | tr -d ' ')" = "0"
+
+      - name: Install app dependencies
+        run: npm install
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install chromium
+
+      - name: Start exact R5 source locally
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/pansofie-r5-vite.log 2>&1 &
+          echo $! > /tmp/pansofie-r5-vite.pid
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5173/ >/dev/null; then
+              echo "LOCAL_R5_VITE=READY"
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/pansofie-r5-vite.log
+          exit 1
+
+      - name: Run R5 desktop/mobile browser composition acceptance
+        run: npx playwright test tests/e2e/partner-review-r5-browser.spec.mjs --reporter=line
+
+      - name: Upload R5 browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pansofie-r5-browser-evidence
+          path: |
+            browser-evidence-r5/
+            test-results/
+            /tmp/pansofie-r5-vite.log
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Stop local Vite
+        if: always()
+        run: |
+          if [ -f /tmp/pansofie-r5-vite.pid ]; then kill "$(cat /tmp/pansofie-r5-vite.pid)" || true; fi
