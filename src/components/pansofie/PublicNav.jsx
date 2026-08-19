@@ -1,54 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Leaf, Menu, X } from "lucide-react";
 
-const links = [
-  ["/jak-funguje", "Jak to funguje"],
-  ["/pilot", "Pro školy"],
-  ["/partneri", "Pro partnery"],
+const NAV_LINKS = [
+  ["/#jak-funguje", "Jak to funguje"],
+  ["/#experience", "Experience"],
+  ["/#mise", "Mise"],
+  ["/#ekosystem", "Ekosystém"],
+  ["/#programy", "Programy"],
 ];
 
 export default function PublicNav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/92 backdrop-blur-xl">
-      <div className="container-px max-w-7xl mx-auto h-[74px] flex items-center justify-between gap-4">
+    <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "border-b border-border/60 bg-background/85 backdrop-blur-xl" : "bg-background/70 backdrop-blur-md"}`}>
+      <div className="container-px max-w-7xl mx-auto h-20 flex items-center justify-between gap-4">
         <Link to="/" className="group flex items-center gap-2.5" aria-label="Pansofie — domů">
-          <span className="h-9 w-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-sm transition-transform group-hover:-translate-y-0.5 motion-reduce:transition-none"><Leaf size={18} /></span>
-          <span>
-            <span className="block font-heading font-bold text-[17px] leading-none">Pansofie</span>
-            <span className="hidden md:block mt-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Skutečné zkušenosti. Ověřený rozvoj.</span>
+          <span className="flex items-center justify-center w-9 h-9 rounded-full bg-primary text-primary-foreground transition-transform duration-300 group-hover:scale-105 motion-reduce:transform-none">
+            <Leaf className="w-4 h-4" strokeWidth={2} />
+          </span>
+          <span className="flex flex-col leading-none">
+            <span className="font-display text-lg font-semibold tracking-tight text-foreground">Pansofie</span>
+            <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground font-semibold mt-1">Skutečné zkušenosti</span>
           </span>
         </Link>
 
-        <nav className="hidden xl:flex items-center gap-1 text-sm" aria-label="Veřejná navigace">
-          {links.map(([to, label]) => (
-            <Link key={label} to={to} className="rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-card transition-colors">
+        <nav className="hidden lg:flex items-center gap-7" aria-label="Veřejná navigace">
+          {NAV_LINKS.map(([href, label]) => (
+            <a key={href} href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:bottom-[-6px] after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all hover:after:w-full">
               {label}
-            </Link>
+            </a>
           ))}
         </nav>
 
-        <div className="hidden sm:flex items-center gap-1">
-          <Link to="/login" className="action-quiet px-2.5">Přihlásit</Link>
-          <Link to="/zapojit-se" className="action-quiet px-2.5">Zapojit se</Link>
-          <Link to="/zapojit-se?mode=simulator" className="action-primary min-h-10 rounded-xl px-4 py-2">
+        <div className="hidden sm:flex items-center gap-2">
+          <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2.5 py-2">Přihlásit</Link>
+          <Link to="/zapojit-se" className="hidden xl:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors px-2.5 py-2">Zapojit se</Link>
+          <Link to="/zapojit-se?mode=simulator" className="action-primary min-h-10 rounded-full px-5 py-2.5">
             Vyzkoušet 60 s <ArrowRight size={15} />
           </Link>
         </div>
 
-        <button className="xl:hidden h-10 w-10 rounded-xl border border-border bg-card flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" onClick={() => setOpen((value) => !value)} aria-label={open ? "Zavřít menu" : "Otevřít menu"} aria-expanded={open} aria-controls="public-mobile-menu">
-          {open ? <X size={19} /> : <Menu size={19} />}
+        <button type="button" className="sm:hidden p-2 -mr-2 text-foreground" onClick={() => setOpen((value) => !value)} aria-label={open ? "Zavřít menu" : "Otevřít menu"} aria-expanded={open} aria-controls="public-mobile-menu">
+          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
       {open && (
-        <div id="public-mobile-menu" className="xl:hidden border-t border-border/60 bg-background px-5 py-4 flex flex-col gap-1 shadow-lg">
-          {links.map(([to, label]) => <Link key={label} to={to} className="rounded-xl px-3 py-2.5 text-sm hover:bg-card" onClick={() => setOpen(false)}>{label}</Link>)}
-          <Link to="/login" className="rounded-xl px-3 py-2.5 text-sm" onClick={() => setOpen(false)}>Přihlásit</Link>
-          <Link to="/zapojit-se" className="rounded-xl px-3 py-2.5 text-sm" onClick={() => setOpen(false)}>Zapojit se</Link>
-          <Link to="/zapojit-se?mode=simulator" className="action-primary mt-2 w-full" onClick={() => setOpen(false)}>Vyzkoušet Pansofii za 60 sekund <ArrowRight size={16} /></Link>
+        <div id="public-mobile-menu" className="sm:hidden bg-background/95 backdrop-blur-xl border-t border-border">
+          <nav className="px-6 py-6 flex flex-col gap-2" aria-label="Mobilní navigace">
+            {NAV_LINKS.map(([href, label]) => (
+              <a key={href} href={href} onClick={() => setOpen(false)} className="text-base text-foreground rounded-xl px-3 py-2 hover:bg-card">
+                {label}
+              </a>
+            ))}
+            <Link to="/login" onClick={() => setOpen(false)} className="text-base text-foreground rounded-xl px-3 py-2">Přihlásit</Link>
+            <Link to="/zapojit-se" onClick={() => setOpen(false)} className="text-base text-foreground rounded-xl px-3 py-2">Zapojit se</Link>
+            <Link to="/zapojit-se?mode=simulator" onClick={() => setOpen(false)} className="mt-2 action-primary w-full justify-center rounded-full">
+              Vyzkoušet 60 s <ArrowRight size={16} />
+            </Link>
+          </nav>
         </div>
       )}
     </header>
