@@ -1,18 +1,15 @@
 name: PR Public UI Visual Proof
 
 on:
-  workflow_dispatch:
-    inputs:
-      preview_url:
-        description: "Exact Vercel preview/share URL to verify"
-        required: true
-        type: string
+  pull_request:
+    paths:
+      - ".github/workflows/pr-public-ui-visual-proof.yml"
 
 permissions:
   contents: read
 
 concurrency:
-  group: pansofie-public-ui-visual-proof
+  group: pansofie-pr48-visual-proof-v2
   cancel-in-progress: true
 
 jobs:
@@ -20,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      PANSOFIE_PR_PREVIEW_URL: ${{ inputs.preview_url }}
+      PANSOFIE_PR_PREVIEW_URL: https://pansofie-staging-git-feat-public-ui-experie-532d54-voodoo-caser.vercel.app/?_vercel_share=BCExtPUmH1j18pNUJI6Mr39memtnP9QK
     steps:
       - uses: actions/checkout@v4
 
@@ -44,7 +41,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pansofie-public-ui-visual-proof
+          name: pansofie-pr48-public-ui-visual-proof-v2
           path: test-results/
           if-no-files-found: warn
           retention-days: 14
