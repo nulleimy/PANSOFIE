@@ -11,6 +11,7 @@ import Pilot from "@/pages/Pilot";
 import Partner from "@/pages/Partner";
 import ProgramDetail from "@/pages/ProgramDetail";
 import Join from "@/pages/Join";
+import Contact from "@/pages/Contact";
 import PublicInfoPage from "@/pages/PublicInfoPage";
 import Login from "@/pages/Login";
 import AdminLogin from "@/pages/AdminLogin";
@@ -54,7 +55,7 @@ export default function App() {
             <Route path="/partneri" element={<Partner />} />
             <Route path="/program/:id" element={<ProgramDetail />} />
             <Route path="/zapojit-se" element={<Join />} />
-            <Route path="/kontakt" element={<Join />} />
+            <Route path="/kontakt" element={<Contact />} />
             <Route path="/o-projektu" element={<PublicInfoPage kind="about" />} />
             <Route path="/soukromi" element={<PublicInfoPage kind="privacy" />} />
             <Route path="/bezpecnost" element={<PublicInfoPage kind="safety" />} />
