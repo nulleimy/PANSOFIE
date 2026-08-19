@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - verify/public-web-visual-polish-r1-browser
+  pull_request:
+    branches:
+      - feat/public-web-visual-polish-r1
   workflow_dispatch:
 
 permissions:
@@ -29,8 +32,8 @@ jobs:
       - name: Verify inherited R1 runtime head
         run: |
           echo "VERIFY_BRANCH_HEAD=$(git rev-parse HEAD)"
-          echo "R1_RUNTIME_PARENT=$(git rev-parse HEAD~2)"
-          test "$(git rev-parse HEAD~2)" = "b78228d04047f438a6190b2318cc9e227d96b60a"
+          git merge-base --is-ancestor b78228d04047f438a6190b2318cc9e227d96b60a HEAD
+          test "$(git diff --name-only b78228d04047f438a6190b2318cc9e227d96b60a...HEAD | grep -v '^tests/e2e/public-r1-visual-acceptance.spec.mjs$' | grep -v '^.github/workflows/verify-public-r1-browser.yml$' | wc -l | tr -d ' ')" = "0"
 
       - name: Install app dependencies
         run: npm install
