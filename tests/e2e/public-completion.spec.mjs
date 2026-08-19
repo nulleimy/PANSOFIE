@@ -18,7 +18,7 @@ function runtimeErrors(page) {
 
 const ROUTES = [
   ["/zapojit-se", /Vyzkoušejte Pansofii/],
-  ["/kontakt", /Vyzkoušejte Pansofii/],
+  ["/kontakt", /Veřejný kontaktní kanál/],
   ["/o-projektu", /Pansofie staví učení/],
   ["/soukromi", /Soukromí podle účelu/],
   ["/bezpecnost", /Bezpečnost není disclaimer/],
@@ -37,6 +37,22 @@ for (const [path, heading] of ROUTES) {
     expect(errors, `runtime errors on ${path}:\n${errors.join("\n")}`).toEqual([]);
   });
 }
+
+test("public contact is a truthful non-submit fallback with meaningful next actions", async ({ page }) => {
+  const errors = runtimeErrors(page);
+  await page.goto(`${BASE_URL}/kontakt`, { waitUntil: "networkidle" });
+
+  await expect(page.getByRole("heading", { name: /Veřejný kontaktní kanál zatím není spuštěný/ })).toBeVisible();
+  await expect(page.getByText(/Nechceme předstírat funkční formulář/)).toBeVisible();
+  await expect(page.locator("form")).toHaveCount(0);
+  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /Prozkoumat školní pilot/ })).toHaveAttribute("href", "/pilot");
+  await expect(page.getByRole("link", { name: /Jak funguje partnerství/ })).toHaveAttribute("href", "/partneri");
+  await expect(page.getByRole("link", { name: /Vyzkoušet Pansofii za 60 sekund/ })).toHaveAttribute("href", "/zapojit-se?mode=simulator");
+  await expect(page.getByRole("link", { name: /Jak Pansofie funguje/ }).last()).toHaveAttribute("href", "/jak-funguje");
+  await expect(page.getByText(/Nic se neodesílá ani neukládá/)).toBeVisible();
+  expect(errors, `runtime errors on /kontakt:\n${errors.join("\n")}`).toEqual([]);
+});
 
 test("professional homepage exposes one dominant Experience entry and truthful readiness state", async ({ page }) => {
   const errors = runtimeErrors(page);
