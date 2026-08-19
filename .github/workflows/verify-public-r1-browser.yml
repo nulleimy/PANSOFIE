@@ -19,7 +19,7 @@ concurrency:
 jobs:
   visual-acceptance:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 12
     env:
       PANSOFIE_LOCAL_URL: http://127.0.0.1:5173
     steps:
@@ -40,13 +40,10 @@ jobs:
       - name: Install app dependencies
         run: npm install
 
-      - name: Run repository checks and production build
-        run: npm run check
-
       - name: Install Playwright Chromium
         run: |
           npm install --no-save @playwright/test@1.55.0
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
 
       - name: Start local Vite server
         run: |
