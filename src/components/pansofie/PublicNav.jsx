@@ -10,6 +10,11 @@ const NAV_LINKS = [
   ["/#programy", "Programy"],
 ];
 
+const ROUTE_LINKS = [
+  ["/pilot", "Pro školy"],
+  ["/partneri", "Pro partnery"],
+];
+
 export default function PublicNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -34,17 +39,22 @@ export default function PublicNav() {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-7" aria-label="Veřejná navigace">
+        <nav className="hidden xl:flex items-center gap-6" aria-label="Veřejná navigace">
           {NAV_LINKS.map(([href, label]) => (
             <a key={href} href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:bottom-[-6px] after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all hover:after:w-full">
               {label}
             </a>
           ))}
+          {ROUTE_LINKS.map(([to, label]) => (
+            <Link key={to} to={to} className="text-sm text-muted-foreground hover:text-foreground transition-colors relative after:absolute after:bottom-[-6px] after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all hover:after:w-full">
+              {label}
+            </Link>
+          ))}
         </nav>
 
         <div className="hidden sm:flex items-center gap-2">
           <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors px-2.5 py-2">Přihlásit</Link>
-          <Link to="/zapojit-se" className="hidden xl:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors px-2.5 py-2">Zapojit se</Link>
+          <Link to="/zapojit-se" className="hidden 2xl:inline-flex text-sm text-muted-foreground hover:text-foreground transition-colors px-2.5 py-2">Zapojit se</Link>
           <Link to="/zapojit-se?mode=simulator" className="action-primary min-h-10 rounded-full px-5 py-2.5">
             Vyzkoušet 60 s <ArrowRight size={15} />
           </Link>
@@ -62,6 +72,11 @@ export default function PublicNav() {
               <a key={href} href={href} onClick={() => setOpen(false)} className="text-base text-foreground rounded-xl px-3 py-2 hover:bg-card">
                 {label}
               </a>
+            ))}
+            {ROUTE_LINKS.map(([to, label]) => (
+              <Link key={to} to={to} onClick={() => setOpen(false)} className="text-base text-foreground rounded-xl px-3 py-2 hover:bg-card">
+                {label}
+              </Link>
             ))}
             <Link to="/login" onClick={() => setOpen(false)} className="text-base text-foreground rounded-xl px-3 py-2">Přihlásit</Link>
             <Link to="/zapojit-se" onClick={() => setOpen(false)} className="text-base text-foreground rounded-xl px-3 py-2">Zapojit se</Link>
