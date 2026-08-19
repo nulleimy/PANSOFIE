@@ -42,8 +42,8 @@ export default function Home() {
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <a href="#mise" className="action-primary w-full sm:w-auto px-7 py-3.5">Objevit nápady na mise <ArrowRight size={18} /></a>
-                <Link to="/zapojit-se?mode=simulator" className="action-secondary w-full sm:w-auto px-7 py-3.5">Vyzkoušet Pansofii za 60 sekund <ArrowRight size={17} /></Link>
+                <a href="#mise" className="action-primary w-full sm:w-auto px-7 py-3.5 rounded-full">Objevit nápady na mise <ArrowRight size={18} /></a>
+                <Link to="/zapojit-se?mode=simulator" className="action-secondary w-full sm:w-auto px-7 py-3.5 rounded-full">Vyzkoušet Pansofii za 60 sekund <ArrowRight size={17} /></Link>
               </div>
 
               <p className="mt-4 text-xs sm:text-sm text-muted-foreground">Interaktivní ukázka nic neposílá na server a sama nevytváří Mission Run, ověření ani dopad.</p>
@@ -140,13 +140,16 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-20 sm:py-28 border-t border-border/60 bg-card/35">
-          <div className="container-px max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl sm:text-5xl font-semibold font-display tracking-tight text-balance">První field pilot má ověřit celý vztah, ne jen software.</h2>
-            <p className="mt-5 text-lg text-muted-foreground leading-relaxed text-balance max-w-3xl mx-auto">Žák má získat skutečnou zkušenost. Učitel zvládnutelný postup. Rodina bezpečnou roli. Partner nebo komunita reálný důvod se zapojit. To všechno se musí potvrdit v realitě.</p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/zapojit-se?role=school" className="action-primary w-full sm:w-auto px-7 py-3.5">Chci zapojit školu <ArrowRight size={18} /></Link>
-              <Link to="/zapojit-se?role=partner" className="action-secondary w-full sm:w-auto">Jsem partner / organizace <ArrowRight size={15} /></Link>
+        <section className="py-20 sm:py-28 border-t border-border/60 bg-secondary/20">
+          <div className="container-px max-w-5xl mx-auto">
+            <div className="max-w-3xl mx-auto rounded-[2rem] border border-border bg-card p-8 sm:p-12 shadow-[0_22px_60px_-48px_rgba(23,32,28,0.35)]">
+              <p className="eyebrow">První pilot</p>
+              <h2 className="mt-4 text-3xl sm:text-5xl font-semibold font-display tracking-tight text-balance">První pilot má ověřit celý vztah, ne jen software.</h2>
+              <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl">Žák má získat skutečnou zkušenost. Učitel zvládnutelný postup. Rodina bezpečnou a smysluplnou roli. Partner nebo komunita reálný důvod se zapojit. To všechno se musí potvrdit v realitě.</p>
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <Link to="/zapojit-se?role=school" className="action-primary w-full sm:w-auto px-7 py-3.5 rounded-full">Chci zapojit školu <ArrowRight size={18} /></Link>
+                <Link to="/zapojit-se?role=partner" className="action-secondary w-full sm:w-auto px-7 py-3.5 rounded-full">Jsem partner / organizace <ArrowRight size={15} /></Link>
+              </div>
             </div>
           </div>
         </section>
