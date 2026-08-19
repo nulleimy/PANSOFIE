@@ -37,7 +37,7 @@ export default function Contact() {
           <div className="max-w-3xl">
             <span className="chip bg-primary/10 text-primary mb-5"><ShieldCheck size={14} /> Transparentní kontakt</span>
             <h1 className="text-4xl sm:text-6xl font-semibold font-display tracking-tight text-balance leading-[1.05]">Veřejný kontaktní kanál <span className="text-primary">zatím není spuštěný.</span></h1>
-            <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed">Nechceme předstírat funkční formulář ani tvrdit, že jsme váš zájem uložili, když pro veřejné leady ještě nemáme schválený kontaktní proces.</p>
+            <p className="mt-6 text-lg sm:text-xl text-muted-foreground leading-relaxed">Nechceme předstírat funkční formulář ani tvrdit, že jsme váš zájem uložili, dokud pro zájemce z veřejného webu nemáme schválený kontaktní proces.</p>
             <p className="mt-4 text-sm sm:text-base text-muted-foreground leading-relaxed">Dokud nebude zveřejněný faktický kontakt odpovědné osoby nebo ověřený rezervační kanál, tato stránka nesbírá jméno, e-mail ani jiná osobní data.</p>
           </div>
 
@@ -57,7 +57,7 @@ export default function Contact() {
           <section className="mt-8 rounded-[2rem] border border-border bg-card/35 p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">Co se stane teď</p>
             <h2 className="mt-2 text-2xl sm:text-3xl font-semibold font-display">Nic se neodesílá ani neukládá.</h2>
-            <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed max-w-3xl">Odkazy výše vedou pouze na existující veřejné části Pansofie. Nejde o odeslání poptávky, rezervaci ani přihlášení do pilotu. Skutečný veřejný kontaktní endpoint zde doplníme až ve chvíli, kdy bude fakticky existovat a bude možné pravdivě popsat, kdo ho spravuje a jak se s údaji nakládá.</p>
+            <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed max-w-3xl">Odkazy výše vedou pouze na existující veřejné části Pansofie. Nejde o odeslání poptávky, rezervaci ani přihlášení do pilotu. Skutečný veřejný kontaktní kanál zde doplníme až ve chvíli, kdy bude fakticky existovat a bude možné pravdivě popsat, kdo ho spravuje a jak se s údaji nakládá.</p>
             <Link to="/jak-funguje" className="mt-6 action-secondary w-full sm:w-auto px-6 py-3">Jak Pansofie funguje <ArrowRight size={16} /></Link>
           </section>
         </section>
