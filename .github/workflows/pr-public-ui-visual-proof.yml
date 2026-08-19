@@ -1,26 +1,19 @@
 name: PR Public UI Visual Proof
 
 on:
-  workflow_dispatch:
-    inputs:
-      preview_url:
-        description: "Exact Vercel preview/share URL to verify"
-        required: true
-        type: string
+  pull_request:
+    paths:
+      - ".github/workflows/pr-public-ui-visual-proof.yml"
 
 permissions:
   contents: read
-
-concurrency:
-  group: pansofie-public-ui-visual-proof
-  cancel-in-progress: true
 
 jobs:
   chromium-visual-proof:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      PANSOFIE_PR_PREVIEW_URL: ${{ inputs.preview_url }}
+      PANSOFIE_PR_PREVIEW_URL: http://127.0.0.1:4173
     steps:
       - uses: actions/checkout@v4
 
@@ -37,6 +30,16 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Start exact-source Vite preview
+        run: |
+          npm run dev -- --host 127.0.0.1 --port 4173 > /tmp/pansofie-vite.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4173 >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/pansofie-vite.log
+          exit 1
+
       - name: Capture desktop and mobile visual proof
         run: npx playwright test tests/e2e/public-ui-visual-reference.spec.mjs --reporter=line --workers=1
 
@@ -44,7 +47,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pansofie-public-ui-visual-proof
+          name: pansofie-pr48-local-exact-source-visual-proof
           path: test-results/
           if-no-files-found: warn
           retention-days: 14
