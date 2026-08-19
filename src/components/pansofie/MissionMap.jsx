@@ -117,6 +117,7 @@ export default function MissionMap() {
             <div className="mt-auto pt-6">
               <div className="flex items-center gap-2 text-primary"><Sparkles className="w-4 h-4" /><span className="text-xs tracking-[0.15em] uppercase font-semibold">Vlastní nápad</span></div>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Nemusíš čekat na přidělenou misi. Vyber inspiraci, uprav ji podle sebe nebo začni vlastním nápadem.</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">Vlastní nápad je návrh a nevytváří automaticky Mission Run ani neobchází bezpečnostní nebo souhlasové hranice.</p>
               <Link to="/zapojit-se?mode=simulator" className="mt-4 action-primary w-full justify-center rounded-full">+ Vymyslet vlastní misi <ArrowRight className="w-4 h-4" /></Link>
             </div>
           </aside>
