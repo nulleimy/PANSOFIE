@@ -52,7 +52,7 @@ test("public CTA contract has no empty or dead internal destinations", async ({ 
     if (href.startsWith("#")) {
       await collector.goto(`${BASE_URL}${sourcePath}`, { waitUntil: "networkidle" });
       const id = href.slice(1);
-      await expect(collector.locator(`#${CSS.escape(id)}`), `hash CTA ${text || aria} on ${sourcePath} must target an element`).toHaveCount(1);
+      await expect(collector.locator(`[id="${id}"]`), `hash CTA ${text || aria} on ${sourcePath} must target an element`).toHaveCount(1);
       continue;
     }
 
