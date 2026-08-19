@@ -51,10 +51,13 @@ test("homepage communicates current Experience-first truthfully", async ({ page,
   await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle" });
 
   await expect(page.getByText("Experience-first ekosystém", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Nejdřív něco skutečně uděláš/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Poznej sebe.*Tvoř s druhými.*Zlepšuj svět/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Jedna Experience uprostřed/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Přínos není skóre člověka." })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Prozkoumat první pilot" }).first()).toHaveAttribute("href", "/pilot");
+  await expect(page.getByRole("link", { name: /Vyzkoušet Pansofii za 60 sekund/i }).first()).toHaveAttribute("href", "/zapojit-se?mode=simulator");
+  await expect(page.getByRole("link", { name: /Jak Pansofie funguje/i }).first()).toHaveAttribute("href", "/jak-funguje");
+  await expect(page.getByText(/Bounded runtime na stagingu/i)).toHaveCount(0);
+  await expect(page.getByText(/STAGING VERIFIED/i)).toHaveCount(0);
 
   await page.screenshot({ path: testInfo.outputPath(`homepage-desktop-${browserName}.png`), fullPage: true });
   expect(errors, `runtime errors on homepage:\n${errors.join("\n")}`).toEqual([]);
@@ -78,13 +81,14 @@ test("public core pages render desktop evidence screenshots", async ({ page, bro
   }
 });
 
-test("pilot truthfully distinguishes staging verification from field pilot", async ({ page }) => {
+test("pilot truthfully distinguishes digital readiness from real field verification", async ({ page }) => {
   const errors = runtimeErrors(page);
   const response = await page.goto(`${BASE_URL}/pilot`, { waitUntil: "networkidle" });
 
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
-  await expect(page.getByText("PANSOFIE SCHOOL · PŘIPRAVENO PRO PRVNÍ FIELD PILOT")).toBeVisible();
+  await expect(page.getByText("PANSOFIE SCHOOL · PŘIPRAVENO K PRVNÍMU OVĚŘENÍ VE ŠKOLE")).toBeVisible();
+  await expect(page.getByText(/Digitální školní cesta je funkční a otestovaná/)).toBeVisible();
   await expect(page.getByText(/Reálný field pilot ve škole ještě neproběhl/)).toBeVisible();
   await expect(page.getByText("Zlepši svou školu", { exact: true })).toBeVisible();
   await expect(page.getByText("Digitální most", { exact: true })).toBeVisible();
