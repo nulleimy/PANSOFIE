@@ -1,0 +1,80 @@
+name: Verify Public Contact R1
+
+on:
+  push:
+    branches:
+      - verify/public-contact-truth-r1
+  pull_request:
+    branches:
+      - feat/public-contact-truth-r1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-public-contact-r1-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contact-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PANSOFIE_LOCAL_URL: http://127.0.0.1:5173
+      PANSOFIE_STAGING_URL: http://127.0.0.1:5173
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify exact inherited product head
+        run: |
+          git merge-base --is-ancestor 90057efca35a778a1973acc6cdacd73162e02a86 HEAD
+          test "$(git diff --name-only 90057efca35a778a1973acc6cdacd73162e02a86...HEAD | grep -v '^tests/e2e/public-contact-visual.spec.mjs$' | grep -v '^.github/workflows/verify-public-contact-r1.yml$' | wc -l | tr -d ' ')" = "0"
+
+      - name: Install app dependencies
+        run: npm install
+
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install chromium
+
+      - name: Start exact branch runtime locally
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/pansofie-contact-vite.log 2>&1 &
+          echo $! > /tmp/pansofie-contact-vite.pid
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:5173/kontakt >/dev/null; then
+              echo "LOCAL_CONTACT_RUNTIME=READY"
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/pansofie-contact-vite.log
+          exit 1
+
+      - name: Run P0 public contact and CTA acceptance
+        run: npx playwright test tests/e2e/public-contact-visual.spec.mjs tests/e2e/public-cta-contract.spec.mjs tests/e2e/public-completion.spec.mjs --reporter=line
+
+      - name: Upload contact browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pansofie-public-contact-r1-evidence
+          path: |
+            browser-evidence-contact/
+            test-results/
+            /tmp/pansofie-contact-vite.log
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Stop local Vite
+        if: always()
+        run: |
+          if [ -f /tmp/pansofie-contact-vite.pid ]; then kill "$(cat /tmp/pansofie-contact-vite.pid)" || true; fi
